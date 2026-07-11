@@ -31,11 +31,4 @@ export const METRIC_CARDS: MetricCardConfig[] = [
     field: "jitter",
     unit: "ms",
   },
-  {
-    icon: "wifi_off",
-    iconLabel: "Packet Loss",
-    label: "LOSS",
-    field: "packetLoss",
-    unit: "%",
-  },
 ];
