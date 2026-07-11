@@ -6,15 +6,15 @@ interface HistoryListProps {
   entries: HistoryEntry[];
 }
 
-function timeAgo(date: Date): string {
-  const diffMs = Date.now() - date.getTime();
+function timeAgo(ts: number): string {
+  const diffMs = Date.now() - ts;
   const diffMin = Math.floor(diffMs / 60000);
   const diffHrs = Math.floor(diffMs / 3600000);
 
   if (diffMin < 1) return "just now";
-  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? "" : "s"} ago`;
-  if (diffHrs < 24) return `${diffHrs} hour${diffHrs === 1 ? "" : "s"} ago`;
-  return `${Math.floor(diffHrs / 24)} day(s) ago`;
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHrs < 24) return `${diffHrs}h ago`;
+  return `${Math.floor(diffHrs / 24)}d ago`;
 }
 
 export function HistoryList({ entries }: HistoryListProps) {
@@ -41,7 +41,7 @@ export function HistoryList({ entries }: HistoryListProps) {
         {entries.map((entry) => (
           <div
             key={entry.id}
-            className="flex items-center justify-between border border-outline-variant/10 bg-surface-container-lowest/60 p-md transition-[background-color,opacity,transform] duration-200 ease-out hover:bg-surface-container-low focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+            className="flex items-center justify-between border border-outline-variant/10 bg-surface-container-lowest/60 p-md transition-[background-color,opacity,transform] duration-200 ease-out hover:bg-surface-container-low"
             tabIndex={0}
             role="listitem"
           >
@@ -53,16 +53,16 @@ export function HistoryList({ entries }: HistoryListProps) {
               </div>
               <div>
                 <p className="font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-primary">
-                  {entry.speed} Mbps
+                  {entry.download.toFixed(1)} Mbps
                 </p>
-                <p className="font-mono text-[10px] uppercase leading-none tracking-widest text-on-surface-variant opacity-60">
-                  {timeAgo(entry.timestamp)}
+                <p className="font-mono text-[10px] uppercase leading-none tracking-widest text-on-surface-variant/60">
+                  ↓{entry.download.toFixed(0)} ↑{entry.upload.toFixed(0)} · {entry.ping}ms · {timeAgo(entry.timestamp)}
                 </p>
               </div>
             </div>
             <div className="text-right">
               <span className="font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
-                {entry.server}
+                {entry.server.split("//")[0]?.trim() || entry.server}
               </span>
             </div>
           </div>

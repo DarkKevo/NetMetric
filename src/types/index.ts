@@ -8,9 +8,13 @@ export interface MetricData {
 
 export interface HistoryEntry {
   id: string;
-  speed: number;
+  download: number;
+  upload: number;
+  ping: number;
+  jitter: number;
+  packetLoss: number;
   server: string;
-  timestamp: Date;
+  timestamp: number;
 }
 
 export type TestStatus = "idle" | "testing" | "results";

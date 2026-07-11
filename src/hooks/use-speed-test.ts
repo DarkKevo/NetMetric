@@ -1,13 +1,15 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import type { MetricData, TestPhase, TestStatus } from "@/types";
+import type { HistoryEntry, MetricData, TestPhase, TestStatus } from "@/types";
 import {
   calculateJitter,
   calculateMbps,
   calculatePacketLoss,
   median,
 } from "@/lib/speed-measure";
+import { saveEntry } from "@/lib/history-storage";
+import { useServerSelect } from "./use-server-select";
 
 interface UseSpeedTestReturn {
   status: TestStatus;
@@ -17,6 +19,7 @@ interface UseSpeedTestReturn {
   liveSamples: number[];
   runTest: () => void;
   reset: () => void;
+  history: HistoryEntry[];
 }
 
 const PING_COUNT = 10;
@@ -81,7 +84,6 @@ async function measureUpload(
   const totalBytes = sizeMb * 1024 * 1024;
   const payload = new Uint8Array(totalBytes);
 
-  // crypto.getRandomValues() max is 65536 bytes per call
   const MAX_CHUNK = 65536;
   for (let offset = 0; offset < totalBytes; offset += MAX_CHUNK) {
     const chunk = payload.subarray(offset, offset + MAX_CHUNK);
@@ -133,8 +135,10 @@ export function useSpeedTest(): UseSpeedTestReturn {
   const [progress, setProgress] = useState(0);
   const [metrics, setMetrics] = useState<MetricData | null>(null);
   const [liveSamples, setLiveSamples] = useState<number[]>([]);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   const runningRef = useRef(false);
+  const { serverName } = useServerSelect();
 
   const reset = useCallback(() => {
     runningRef.current = false;
@@ -200,13 +204,22 @@ export function useSpeedTest(): UseSpeedTestReturn {
         const finalSamples = downloadResult.samples;
         setLiveSamples(finalSamples);
 
-        setMetrics({
+        const entry: HistoryEntry = {
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
           download: downloadResult.speed,
           upload: uploadSpeed,
           ping: pingVal,
           jitter: jitterVal,
           packetLoss,
-        });
+          server: serverName,
+          timestamp: Date.now(),
+        };
+
+        setMetrics(entry);
+
+        // Persist to localStorage and update UI list
+        saveEntry(entry);
+        setHistory((prev) => [entry, ...prev]);
 
         setPhase("results");
         setStatus("results");
@@ -219,7 +232,7 @@ export function useSpeedTest(): UseSpeedTestReturn {
         setProgress(0);
       }
     })();
-  }, []);
+  }, [serverName]);
 
-  return { status, phase, progress, metrics, liveSamples, runTest, reset };
+  return { status, phase, progress, metrics, liveSamples, runTest, reset, history };
 }

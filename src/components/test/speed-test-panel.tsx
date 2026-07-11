@@ -1,14 +1,28 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { SpeedGauge } from "@/components/test/speed-gauge";
 import { UploadSpeed } from "@/components/test/upload-speed";
 import { SecondaryMetrics } from "@/components/test/secondary-metrics";
 import { ThroughputChart } from "@/components/test/throughput-chart";
 import { useSpeedTest } from "@/hooks/use-speed-test";
 
-export function SpeedTestPanel() {
+interface SpeedTestPanelProps {
+  onTestComplete?: () => void;
+}
+
+export function SpeedTestPanel({ onTestComplete }: SpeedTestPanelProps) {
   const { status, phase, progress, metrics, liveSamples, runTest, reset } =
     useSpeedTest();
+
+  const prevStatus = useRef(status);
+
+  useEffect(() => {
+    if (status === "results" && prevStatus.current !== "results") {
+      onTestComplete?.();
+    }
+    prevStatus.current = status;
+  }, [status, onTestComplete]);
 
   return (
     <div className="flex w-full flex-col items-center">
