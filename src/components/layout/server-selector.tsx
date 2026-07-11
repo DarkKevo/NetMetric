@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useServerSelect } from "@/hooks/use-server-select";
 
 export function ServerSelector() {
@@ -16,6 +16,35 @@ export function ServerSelector() {
     refreshPing,
   } = useServerSelect();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure client-only rendering after hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // During SSR / first paint, render a static placeholder
+  // to avoid hydration mismatch with client-only data
+  if (!mounted) {
+    return (
+      <div className="relative">
+        <button
+          disabled
+          className="flex cursor-not-allowed items-center gap-xs rounded-sm bg-surface-container-high px-base py-xs border border-outline/20 opacity-40"
+        >
+          <span className="material-symbols-outlined text-primary-container scale-75">
+            dns
+          </span>
+          <span className="font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
+            Detecting...
+          </span>
+          <span className="material-symbols-outlined text-on-surface-variant scale-75">
+            keyboard_arrow_down
+          </span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="relative">
@@ -59,7 +88,6 @@ export function ServerSelector() {
             role="listbox"
             className="absolute right-0 top-full z-50 mt-xs min-w-64 rounded-sm border border-outline-variant/20 bg-surface-container-high p-xs shadow-lg"
           >
-            {/* Detected connection info */}
             <li className="px-base py-xs border-b border-outline-variant/20 mb-xs space-y-xs">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/60">
@@ -114,7 +142,6 @@ export function ServerSelector() {
               </li>
             ))}
 
-            {/* Refresh ping */}
             <li className="border-t border-outline-variant/20 mt-xs pt-xs">
               <button
                 onClick={() => {
