@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { SERVERS } from "@/mocks";
+import { useServerSelect } from "@/hooks/use-server-select";
 
 export function ServerSelector() {
+  const { serverName, location, isLoading, servers, selectedId, selectServer } =
+    useServerSelect();
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(SERVERS[0].value);
 
   return (
     <div className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => !isLoading && setIsOpen(!isOpen)}
+        disabled={isLoading}
         className="flex cursor-pointer items-center gap-xs rounded-sm bg-surface-container-high px-base py-xs border border-outline/20 transition-[border-color,opacity,transform] duration-200 ease-out hover:border-primary-container/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-40 disabled:cursor-not-allowed"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -19,7 +21,7 @@ export function ServerSelector() {
           dns
         </span>
         <span className="font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
-          {selected}
+          {serverName}
         </span>
         <span
           className={`material-symbols-outlined text-on-surface-variant scale-75 transition-transform duration-200 ease-out ${
@@ -39,24 +41,33 @@ export function ServerSelector() {
           />
           <ul
             role="listbox"
-            className="absolute right-0 top-full z-50 mt-xs w-48 rounded-sm border border-outline-variant/20 bg-surface-container-high p-xs shadow-lg"
+            className="absolute right-0 top-full z-50 mt-xs min-w-56 rounded-sm border border-outline-variant/20 bg-surface-container-high p-xs shadow-lg"
           >
-            {SERVERS.map((server) => (
+            <li className="px-base py-xs border-b border-outline-variant/20 mb-xs">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/60">
+                Your location
+              </p>
+              <p className="font-mono text-[12px] font-medium text-on-surface-variant">
+                {location}
+              </p>
+            </li>
+
+            {servers.map((server) => (
               <li key={server.id}>
                 <button
                   role="option"
-                  aria-selected={selected === server.value}
+                  aria-selected={selectedId === server.id}
                   onClick={() => {
-                    setSelected(server.value);
+                    selectServer(server.id);
                     setIsOpen(false);
                   }}
                   className={`flex w-full cursor-pointer items-center gap-xs rounded-sm px-base py-sm font-mono text-[12px] font-medium uppercase leading-none tracking-widest transition-[background-color,opacity,transform] duration-150 ease-out hover:bg-surface-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-40 disabled:cursor-not-allowed ${
-                    selected === server.value
+                    selectedId === server.id
                       ? "text-primary-container"
                       : "text-on-surface-variant"
                   }`}
                 >
-                  {server.label}
+                  {server.name}
                 </button>
               </li>
             ))}
