@@ -12,7 +12,7 @@ export function ThroughputChart({ entries }: ThroughputChartProps) {
 
   if (entries.length === 0) {
     return (
-      <div className="my-lg group relative overflow-hidden rounded-sm border border-outline-variant/10 bg-surface-container-low/40 p-md">
+      <div className="mb-xl group relative overflow-hidden rounded-sm border border-outline-variant/10 bg-surface-container-low/40 p-md">
         <div className="flex h-32 items-center justify-center">
           <p className="font-mono text-[11px] uppercase tracking-widest text-on-surface-variant/40">
             Run tests to see your speed trend
@@ -94,7 +94,7 @@ export function ThroughputChart({ entries }: ThroughputChartProps) {
   ].filter((v, i, a) => a.indexOf(v) === i);
 
   return (
-    <div className="my-lg group relative overflow-hidden rounded-sm border border-outline-variant/10 bg-surface-container-low/40 p-md transition-[background-color,opacity] duration-200 ease-out">
+    <div className="mt-20 mb-xl group relative overflow-hidden rounded-sm border border-outline-variant/10 bg-surface-container-low/40 p-md transition-[background-color,opacity] duration-200 ease-out">
       <div className="mb-md flex items-center justify-between">
         <h3 className="flex items-center gap-xs font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
           <span className="inline-block h-2 w-2 rounded-full bg-primary-container" />
