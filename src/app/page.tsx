@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { SpeedTestPanel } from "@/components/test/speed-test-panel";
 import { HistoryList } from "@/components/ui/history-list";
+import { ThroughputChart } from "@/components/test/throughput-chart";
 import { loadHistory } from "@/lib/history-storage";
 import type { HistoryEntry } from "@/types";
 
@@ -29,6 +30,8 @@ export default function Home() {
 
       <main className="relative z-10 mx-auto flex min-h-screen flex-col items-center justify-center px-gutter pb-32 pt-xl max-w-container-max">
         <SpeedTestPanel onTestComplete={handleNewTest} />
+
+        <ThroughputChart entries={history} />
 
         <HistoryList entries={history} />
       </main>

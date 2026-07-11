@@ -55,7 +55,6 @@ async function measureDownload(
   const startTime = performance.now();
 
   const sampleInterval = setInterval(() => {
-    const elapsed = performance.now() - startTime;
     // Instantaneous speed: bytes received in the last 250ms interval
     const intervalBytes = received - lastReceived;
     lastReceived = received;

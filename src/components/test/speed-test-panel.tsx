@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { SpeedGauge } from "@/components/test/speed-gauge";
 import { UploadSpeed } from "@/components/test/upload-speed";
 import { SecondaryMetrics } from "@/components/test/secondary-metrics";
-import { ThroughputChart } from "@/components/test/throughput-chart";
 import { useSpeedTest } from "@/hooks/use-speed-test";
 
 interface SpeedTestPanelProps {
@@ -12,7 +11,7 @@ interface SpeedTestPanelProps {
 }
 
 export function SpeedTestPanel({ onTestComplete }: SpeedTestPanelProps) {
-  const { status, phase, progress, metrics, liveSamples, runTest, reset } =
+  const { status, phase, progress, metrics, runTest, reset } =
     useSpeedTest();
 
   const prevStatus = useRef(status);
@@ -41,10 +40,6 @@ export function SpeedTestPanel({ onTestComplete }: SpeedTestPanelProps) {
       )}
 
       <SecondaryMetrics metrics={metrics} />
-
-      <div className="mb-xl w-full max-w-4xl">
-        <ThroughputChart samples={liveSamples} />
-      </div>
     </div>
   );
 }
