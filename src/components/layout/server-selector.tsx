@@ -38,7 +38,7 @@ export function ServerSelector({ forceOpen, onClose }: ServerSelectorProps) {
   }, [isOpen, onClose]);
 
   const close = () => {
-    close();
+    setIsOpen(false);
     onClose?.();
   };
 
