@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NetMetric
 
-## Getting Started
+> Medidor de velocidad de internet con diagnóstico en tiempo real.
 
-First, run the development server:
+**NetMetric** es una Progressive Web App (PWA) construida con Next.js que mide download, upload, ping, jitter y packet loss directamente desde el navegador — sin plugins, sin registro, sin backend externo.
+
+## Stack
+
+- **Framework**: Next.js 16.2 (App Router, React 19)
+- **Estilos**: Tailwind CSS v4
+- **Linter**: Biome
+- **Tipado**: TypeScript 5
+- **Deploy**: Vercel (recomendado)
+
+## Features
+
+- ⚡ Medición real: download, upload, ping, jitter, packet loss
+- 📊 Throughput chart en vivo durante la medición
+- 📡 Selección automática de servidor según ubicación
+- 🌙 Modo oscuro cyberpunk con paleta cyan `#00F0FF`
+- 📱 Mobile-first responsive
+- 📋 Historial local de resultados
+- 🚀 PWA instalable en el dispositivo
+
+## Cómo funciona
+
+NetMetric tiene su propio backend de medición vía API Routes de Next.js:
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /api/ping` | Payload mínimo para medir latencia |
+| `GET /api/download?size=25` | Streamea datos aleatorios para medir bajada |
+| `POST /api/upload` | Recibe datos para medir subida |
+| `GET /api/servers` | Detecta ubicación y devuelve servidores disponibles |
+
+El browser orquesta el test: ping → download → upload → packet loss, muestreando velocidad cada 250ms para el chart en vivo.
+
+## Desarrollo
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build producción
+npm run build
+
+# Iniciar build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+La medición es real solo cuando el servidor está desplegado en internet (no en localhost). Vercel distribuye automáticamente la app en su edge network para menor latencia.
 
-## Learn More
+## Licencia
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
