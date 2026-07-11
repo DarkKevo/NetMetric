@@ -21,13 +21,19 @@ interface IpInfoResponse {
  * GET /api/servers
  * Returns available test servers, user's ISP, and detected location.
  *
- * Uses ipinfo.io to detect ISP/org from the user's IP.
- * Falls back to Vercel headers if ipinfo fails.
+ * Uses ipinfo.io to detect ISP from the user's real IP.
+ * Falls back to Vercel geo headers if ipinfo fails.
  */
 export async function GET(request: Request) {
   const headers = request.headers;
 
-  // Try ipinfo.io for ISP + precise location
+  // Extract user's real IP from Vercel forwarded headers
+  const userIp =
+    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headers.get("x-real-ip") ||
+    headers.get("x-vercel-forwarded-for") ||
+    null;
+
   let isp: string | null = null;
   let city: string | null = null;
   let region: string | null = null;
@@ -35,10 +41,15 @@ export async function GET(request: Request) {
   let loc: string | null = null;
 
   try {
-    const ipRes = await fetch("https://ipinfo.io/json", {
-      // Vercel forwards the client IP automatically
+    // Query ipinfo.io with the user's IP so it returns THEIR data
+    const lookupUrl = userIp
+      ? `https://ipinfo.io/${userIp}/json`
+      : "https://ipinfo.io/json";
+
+    const ipRes = await fetch(lookupUrl, {
       signal: AbortSignal.timeout(3000),
     });
+
     if (ipRes.ok) {
       const data: IpInfoResponse = await ipRes.json();
       city = data.city || null;
@@ -46,13 +57,13 @@ export async function GET(request: Request) {
       country = data.country || null;
       loc = data.loc || null;
 
-      // Extract ISP name from org (remove AS number prefix)
+      // Extract ISP name (remove AS number prefix, e.g. "AS273090 HOLANET")
       if (data.org) {
         isp = data.org.replace(/^AS\d+\s+/, "");
       }
     }
   } catch {
-    // Fallback: use Vercel geo headers
+    // Fallback: use Vercel geo headers only
     country = headers.get("x-vercel-ip-country") || null;
     region = headers.get("x-vercel-ip-country-region") || null;
     city = headers.get("x-vercel-ip-city") || null;
@@ -62,7 +73,7 @@ export async function GET(request: Request) {
   const locationLabel = [city, region].filter(Boolean).join(", ") || "Auto";
   const countryLabel = country || "Unknown";
 
-  // Build server name: include ISP if detected
+  // Show ISP name + country in the server label (like Speedtest does)
   const serverName = isp
     ? `${isp} // ${countryLabel}`
     : `NetMetric // ${countryLabel}`;
@@ -79,13 +90,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json(
     {
-      client: {
-        isp,
-        country,
-        region,
-        city,
-        loc,
-      },
+      client: { isp, country, region, city, loc },
       servers,
       selected: servers[0].id,
     },
