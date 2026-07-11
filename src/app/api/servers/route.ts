@@ -28,10 +28,11 @@ export async function GET(request: Request) {
   const headers = request.headers;
 
   // Extract user's real IP from Vercel forwarded headers
+  // x-vercel-forwarded-for is set by Vercel edge with the original client IP
   const userIp =
-    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    headers.get("x-real-ip") ||
     headers.get("x-vercel-forwarded-for") ||
+    headers.get("x-real-ip") ||
+    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     null;
 
   let isp: string | null = null;
