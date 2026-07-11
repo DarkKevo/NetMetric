@@ -72,7 +72,7 @@ export function HistoryList({ entries }: HistoryListProps) {
                   </p>
                 </div>
               </div>
-              <div className="shrink-0 text-right">
+              <div className="shrink-0 text-right ml-[5px]">
                 <span className="font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
                   {entry.server.split("//")[0]?.trim() || entry.server}
                 </span>
