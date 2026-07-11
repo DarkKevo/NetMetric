@@ -15,7 +15,7 @@ function formatValue(v: number): string {
 
 export function SecondaryMetrics({ metrics }: SecondaryMetricsProps) {
   return (
-    <div className="mb-xl grid w-full max-w-4xl animate-fade-in grid-cols-1 gap-md md:grid-cols-3 [animation-delay:300ms]">
+    <div className="mb-xl grid w-full max-w-4xl animate-fade-in grid-cols-3 gap-sm md:gap-md [animation-delay:300ms]">
       {METRIC_CARDS.map((card) => (
         <MetricCard
           key={card.field}
