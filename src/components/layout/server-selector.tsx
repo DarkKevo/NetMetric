@@ -73,7 +73,14 @@ export function ServerSelector({ forceOpen, onClose }: ServerSelectorProps) {
   return (
     <div className="relative">
       <button
-        onClick={() => !isLoading && setIsOpen(!isOpen)}
+          onClick={() => {
+            if (isLoading) return;
+            if (isOpen) {
+              close();
+            } else {
+              setIsOpen(true);
+            }
+          }}
         disabled={isLoading}
         className="flex cursor-pointer items-center gap-xs rounded-sm bg-surface-container-high px-base py-xs border border-outline/20 transition-[border-color,opacity,transform] duration-200 ease-out hover:border-primary-container/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-40 disabled:cursor-not-allowed"
         aria-haspopup="listbox"

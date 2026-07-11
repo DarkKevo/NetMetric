@@ -42,12 +42,9 @@ export function ThroughputChart({ entries }: ThroughputChartProps) {
   const graphW = w - padL - padR;
   const graphH = h - padT - padB;
 
-  const mapY = (v: number) =>
-    padT + graphH - (v / maxSpeed) * graphH;
+  const mapY = (v: number) => padT + graphH - (v / maxSpeed) * graphH;
   const mapX = (i: number) =>
-    i === 0
-      ? padL
-      : padL + (i / (sorted.length - 1)) * graphW;
+    i === 0 ? padL : padL + (i / (sorted.length - 1)) * graphW;
 
   // Build download polyline
   const dlPoints = sorted
@@ -66,15 +63,13 @@ export function ThroughputChart({ entries }: ThroughputChartProps) {
   const meanX = indices.reduce((a, b) => a + b, 0) / n;
   const meanY = downloadSpeeds.reduce((a, b) => a + b, 0) / n;
   const slope =
-    indices.reduce((sum, x, i) => sum + (x - meanX) * (downloadSpeeds[i] - meanY), 0) /
-    indices.reduce((sum, x) => sum + (x - meanX) ** 2, 0);
+    indices.reduce(
+      (sum, x, i) => sum + (x - meanX) * (downloadSpeeds[i] - meanY),
+      0,
+    ) / indices.reduce((sum, x) => sum + (x - meanX) ** 2, 0);
 
   const trendLabel =
-    Math.abs(slope) < 0.5
-      ? "STABLE"
-      : slope > 0
-        ? "IMPROVING"
-        : "DECLINING";
+    Math.abs(slope) < 0.5 ? "STABLE" : slope > 0 ? "IMPROVING" : "DECLINING";
   const trendColor =
     trendLabel === "STABLE"
       ? "#00f0ff"
@@ -94,7 +89,7 @@ export function ThroughputChart({ entries }: ThroughputChartProps) {
   ].filter((v, i, a) => a.indexOf(v) === i);
 
   return (
-    <div className="mt-20 mb-xl group relative overflow-hidden rounded-sm border border-outline-variant/10 bg-surface-container-low/40 p-md transition-[background-color,opacity] duration-200 ease-out">
+    <div className="mt-5 mb-5 group relative overflow-hidden rounded-sm border border-outline-variant/10 bg-surface-container-low/40 p-md transition-[background-color,opacity] duration-200 ease-out">
       <div className="mb-md flex items-center justify-between">
         <h3 className="flex items-center gap-xs font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
           <span className="inline-block h-2 w-2 rounded-full bg-primary-container" />
@@ -223,9 +218,7 @@ export function ThroughputChart({ entries }: ThroughputChartProps) {
           <span className="inline-block h-0.5 w-3 border-t border-dashed border-[#00ff88]" />
           Upload
         </span>
-        <span className="ml-auto">
-          Last {sorted.length} tests
-        </span>
+        <span className="ml-auto">Last {sorted.length} tests</span>
       </div>
     </div>
   );
