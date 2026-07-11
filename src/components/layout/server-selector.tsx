@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { useServerSelect } from "@/hooks/use-server-select";
 
-export function ServerSelector() {
+interface ServerSelectorProps {
+  forceOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function ServerSelector({ forceOpen, onClose }: ServerSelectorProps) {
   const {
     serverName,
     isp,
@@ -17,6 +22,25 @@ export function ServerSelector() {
   } = useServerSelect();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  // Sync external forceOpen with internal state
+  useEffect(() => {
+    if (forceOpen) {
+      setIsOpen(true);
+    }
+  }, [forceOpen]);
+
+  // Handle close from outside
+  useEffect(() => {
+    if (!isOpen && onClose) {
+      onClose();
+    }
+  }, [isOpen, onClose]);
+
+  const close = () => {
+    close();
+    onClose?.();
+  };
 
   // Ensure client-only rendering after hydration
   useEffect(() => {
@@ -81,7 +105,7 @@ export function ServerSelector() {
         <>
           <div
             className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
+            onClick={() => close()}
             aria-hidden="true"
           />
           <ul
@@ -124,7 +148,7 @@ export function ServerSelector() {
                   aria-selected={selectedId === server.id}
                   onClick={() => {
                     selectServer(server.id);
-                    setIsOpen(false);
+                    close();
                   }}
                   className={`flex w-full cursor-pointer items-center gap-xs rounded-sm px-base py-sm font-mono text-[12px] font-medium uppercase leading-none tracking-widest transition-[background-color,opacity,transform] duration-150 ease-out hover:bg-surface-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-40 disabled:cursor-not-allowed ${
                     selectedId === server.id
@@ -146,7 +170,7 @@ export function ServerSelector() {
               <button
                 onClick={() => {
                   refreshPing();
-                  setIsOpen(false);
+                  close();
                 }}
                 className="flex w-full cursor-pointer items-center gap-xs rounded-sm px-base py-sm font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/60 transition-[background-color,opacity,transform] duration-150 ease-out hover:bg-surface-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
               >

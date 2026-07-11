@@ -1,6 +1,11 @@
 import { ServerSelector } from "./server-selector";
 
-export function Header() {
+interface HeaderProps {
+  serverForceOpen?: boolean;
+  onServerClose?: () => void;
+}
+
+export function Header({ serverForceOpen, onServerClose }: HeaderProps) {
   return (
     <header className="fixed top-0 z-50 flex w-full items-center justify-between px-gutter py-sm backdrop-blur-md border-b border-outline-variant/20 bg-surface/60 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
       <div className="flex items-center gap-base">
@@ -12,7 +17,7 @@ export function Header() {
         </h1>
       </div>
 
-      <ServerSelector />
+      <ServerSelector forceOpen={serverForceOpen} onClose={onServerClose} />
     </header>
   );
 }
