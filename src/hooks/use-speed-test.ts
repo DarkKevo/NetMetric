@@ -50,12 +50,16 @@ async function measureDownload(
   );
 
   let received = 0;
+  let lastReceived = 0;
   const samples: number[] = [];
   const startTime = performance.now();
 
   const sampleInterval = setInterval(() => {
     const elapsed = performance.now() - startTime;
-    const speed = calculateMbps(received, elapsed);
+    // Instantaneous speed: bytes received in the last 250ms interval
+    const intervalBytes = received - lastReceived;
+    lastReceived = received;
+    const speed = calculateMbps(intervalBytes, 250);
     samples.push(speed);
     const fraction = contentLength > 0 ? received / contentLength : 0;
     onProgress(speed, fraction);
@@ -69,6 +73,12 @@ async function measureDownload(
     }
   } finally {
     clearInterval(sampleInterval);
+    // Push a final sample with the remaining data for completeness
+    const remainingBytes = received - lastReceived;
+    if (remainingBytes > 0) {
+      const finalSpeed = calculateMbps(remainingBytes, 250);
+      samples.push(finalSpeed);
+    }
   }
 
   const totalTime = performance.now() - startTime;
