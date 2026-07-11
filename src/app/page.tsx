@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/layout/header";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { SpeedTestPanel } from "@/components/test/speed-test-panel";
@@ -9,10 +9,14 @@ import { loadHistory } from "@/lib/history-storage";
 import type { HistoryEntry } from "@/types";
 
 export default function Home() {
-  const [history, setHistory] = useState<HistoryEntry[]>(() => loadHistory());
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+
+  // Load history after hydration to avoid SSR mismatch
+  useEffect(() => {
+    setHistory(loadHistory());
+  }, []);
 
   const handleNewTest = () => {
-    // Refresh history from localStorage after each test
     setHistory(loadHistory());
   };
 
