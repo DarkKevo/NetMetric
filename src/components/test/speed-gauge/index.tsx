@@ -57,7 +57,7 @@ export function SpeedGauge({
         <button
           onClick={onStart}
           disabled={buttonDisabled}
-          className="relative z-10 flex h-48 w-48 cursor-pointer flex-col items-center justify-center rounded-full border-2 border-primary-container bg-surface-container-lowest/80 backdrop-blur-xl transition-[background-color,opacity,transform] duration-500 ease-out hover:bg-primary-container hover:text-background focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-inherit"
+          className="relative z-10 flex h-48 w-48 cursor-pointer flex-col items-center justify-center rounded-full border-2 border-primary-container bg-surface-container-lowest/80 backdrop-blur-xl transition-[background-color,opacity,transform] duration-500 ease-out hover:bg-primary-container hover:text-background focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-inherit lg:h-56 lg:w-56"
           aria-label={buttonLabel}
         >
           <span className="relative z-20 font-heading text-xl font-semibold tracking-widest text-primary-container transition-colors duration-500 ease-out group-hover:text-background">
@@ -67,7 +67,7 @@ export function SpeedGauge({
 
         <ProgressRing
           progress={status === "idle" ? 0 : progress}
-          className="absolute h-64 w-64"
+          className="absolute h-64 w-64 lg:h-72 lg:w-72"
         />
       </div>
     </div>

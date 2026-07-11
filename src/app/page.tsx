@@ -45,7 +45,7 @@ export default function Home() {
 
         <Header serverForceOpen={serverOpen} onServerClose={() => setServerOpen(false)} />
 
-        <main className="relative z-10 mx-auto flex min-h-screen flex-col items-center justify-center px-gutter pb-32 pt-xl max-w-container-max">
+        <main className="relative z-10 mx-auto flex min-h-screen flex-col items-center justify-center px-gutter pb-32 pt-xl max-w-container-max lg:pb-16 lg:px-xl">
           <section id="dashboard-section">
             <SpeedTestPanel onTestComplete={handleNewTest} />
           </section>

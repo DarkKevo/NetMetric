@@ -28,7 +28,7 @@ export function BottomNav({ onNavigate }: BottomNavProps) {
   ] as const;
 
   return (
-    <nav className="fixed bottom-0 z-50 flex w-full items-center justify-around border-t border-primary/10 bg-surface-container-lowest/80 px-base py-md backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,240,255,0.1)]">
+    <nav className="fixed bottom-0 z-50 flex w-full items-center justify-around border-t border-primary/10 bg-surface-container-lowest/80 px-base py-md backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,240,255,0.1)] lg:hidden">
       {items.map((item) => (
         <button
           key={item.label}

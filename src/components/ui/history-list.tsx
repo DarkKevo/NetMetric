@@ -46,7 +46,7 @@ export function HistoryList({ entries }: HistoryListProps) {
       <div
         className={`overflow-y-auto rounded-sm border border-outline-variant/10 ${
           showAll ? "max-h-96" : ""
-        }`}
+        } lg:max-h-[32rem]`}
       >
         <div className="divide-y divide-outline-variant/5">
           {display.map((entry) => (

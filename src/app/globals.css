@@ -48,6 +48,7 @@
   --spacing-lg: 40px;
   --spacing-xl: 64px;
   --spacing-gutter: 16px;
+  --spacing-container-max: 1200px;
 
   /* Border Radius */
   --radius-sm: 0.125rem;

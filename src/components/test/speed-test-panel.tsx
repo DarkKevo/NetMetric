@@ -24,8 +24,8 @@ export function SpeedTestPanel({ onTestComplete }: SpeedTestPanelProps) {
   }, [status, onTestComplete]);
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <div className="mb-xl w-full">
+    <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:gap-xl lg:justify-center">
+      <div className="mb-xl w-full lg:mb-0 lg:w-auto">
         <SpeedGauge
           value={metrics?.download ?? 0}
           status={status}
@@ -35,11 +35,13 @@ export function SpeedTestPanel({ onTestComplete }: SpeedTestPanelProps) {
         />
       </div>
 
-      {status === "results" && metrics && (
-        <UploadSpeed value={metrics.upload} />
-      )}
+      <div className="flex w-full max-w-md flex-col items-center lg:items-start lg:pt-12">
+        {status === "results" && metrics && (
+          <UploadSpeed value={metrics.upload} />
+        )}
 
-      <SecondaryMetrics metrics={metrics} />
+        <SecondaryMetrics metrics={metrics} />
+      </div>
     </div>
   );
 }
