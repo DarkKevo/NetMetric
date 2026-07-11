@@ -8,6 +8,11 @@ interface SecondaryMetricsProps {
   metrics: MetricData | null;
 }
 
+function formatValue(v: number): string {
+  // Max 2 decimales, sin trailing zeros
+  return String(Number(v.toFixed(2)));
+}
+
 export function SecondaryMetrics({ metrics }: SecondaryMetricsProps) {
   return (
     <div className="mb-xl grid w-full max-w-4xl animate-fade-in grid-cols-1 gap-md md:grid-cols-3 [animation-delay:300ms]">
@@ -17,7 +22,7 @@ export function SecondaryMetrics({ metrics }: SecondaryMetricsProps) {
           icon={card.icon}
           iconLabel={card.iconLabel}
           label={card.label}
-          value={metrics ? String(metrics[card.field]) : "0"}
+          value={metrics ? formatValue(metrics[card.field]) : "0"}
           unit={card.unit}
         />
       ))}
