@@ -59,7 +59,7 @@ export function ServerSelector({ forceOpen, onClose }: ServerSelectorProps) {
           <span className="material-symbols-outlined text-primary-container scale-75">
             dns
           </span>
-          <span className="font-mono text-[9px] sm:text-[11px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
+          <span className="truncate max-w-[100px] sm:max-w-[140px] font-mono text-[9px] sm:text-[11px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
             Detecting...
           </span>
           <span className="material-symbols-outlined text-on-surface-variant scale-75">
@@ -89,8 +89,8 @@ export function ServerSelector({ forceOpen, onClose }: ServerSelectorProps) {
         <span className="material-symbols-outlined text-primary-container scale-75">
           dns
         </span>
-        <div className="flex flex-col items-start">
-          <span className="font-mono text-[9px] sm:text-[11px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
+        <div className="flex flex-col items-start min-w-0 overflow-hidden">
+          <span className="truncate max-w-[100px] sm:max-w-[140px] font-mono text-[9px] sm:text-[11px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
             {serverName}
           </span>
           {ping !== null && (
@@ -163,7 +163,7 @@ export function ServerSelector({ forceOpen, onClose }: ServerSelectorProps) {
                       : "text-on-surface-variant"
                   }`}
                 >
-                  {server.name}
+                  <span className="truncate overflow-hidden">{server.name}</span>
                   {selectedId === server.id && (
                     <span className="ml-auto text-primary-container material-symbols-outlined scale-75">
                       check

@@ -44,7 +44,7 @@ export function HistoryList({ entries }: HistoryListProps) {
       </h2>
 
       <div
-        className={`overflow-y-auto rounded-sm border border-outline-variant/10 ${
+        className={`overflow-y-auto overflow-x-hidden rounded-sm border border-outline-variant/10 ${
           showAll ? "max-h-96" : ""
         }`}
       >
@@ -52,11 +52,11 @@ export function HistoryList({ entries }: HistoryListProps) {
           {display.map((entry) => (
             <div
               key={entry.id}
-              className="flex items-center justify-between bg-surface-container-lowest/60 p-md transition-[background-color,opacity,transform] duration-200 ease-out hover:bg-surface-container-low"
+              className="flex flex-wrap items-center gap-x-md gap-y-xs bg-surface-container-lowest/60 p-md transition-[background-color,opacity,transform] duration-200 ease-out hover:bg-surface-container-low"
               tabIndex={0}
               role="listitem"
             >
-              <div className="flex items-center gap-md min-w-0">
+              <div className="flex items-center gap-md min-w-0 flex-1">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
                   <span className="material-symbols-outlined scale-75 text-primary-container">
                     north_east
@@ -72,8 +72,8 @@ export function HistoryList({ entries }: HistoryListProps) {
                   </p>
                 </div>
               </div>
-              <div className="shrink-0 text-right ml-[5px]">
-                <span className="font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant">
+              <div className="w-full text-right sm:w-auto sm:ml-auto">
+                <span className="font-mono text-[12px] font-medium uppercase leading-none tracking-widest text-on-surface-variant truncate max-w-[80px] sm:max-w-[120px]">
                   {entry.server.split("//")[0]?.trim() || entry.server}
                 </span>
               </div>
